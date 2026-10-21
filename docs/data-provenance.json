@@ -1,0 +1,59 @@
+{
+  "checked_at": "2026-10-21",
+  "timezone": "Asia/Seoul",
+  "source_of_truth": "https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do?srchStrLtEpsd=1&srchEndLtEpsd=1246",
+  "official_result_page": "https://www.dhlottery.co.kr/lt645/result?ltEpsd=1246",
+  "official_latest_api": "https://www.dhlottery.co.kr/lt645/selectPstLt645InfoNew.do?srchDir=center&srchLtEpsd=1246",
+  "mirror_urls": [
+    "https://smok95.github.io/lotto/results/all.json",
+    "https://papaya5rhw1984.github.io/lotto-data/all.json"
+  ],
+  "comparison_csv": "https://cashlogy.kr/lotto/excel.csv",
+  "first_round": 1,
+  "last_round": 1246,
+  "count": 1246,
+  "first_date": "2002-12-07",
+  "last_date": "2026-10-17",
+  "latest": {
+    "round": 1246,
+    "date": "2026-10-17",
+    "numbers": [
+      16,
+      22,
+      23,
+      24,
+      27,
+      28
+    ],
+    "bonus": 6,
+    "source": "https://www.dhlottery.co.kr/lt645/result?ltEpsd=1246"
+  },
+  "missing_rounds": [],
+  "duplicate_rounds": [],
+  "number_validation": "7 unique integers in 1..45 per draw including bonus",
+  "date_validation": "all dates equal 2002-12-07 + 7*(round-1) days",
+  "cross_checks": [
+    {
+      "source": "smok95",
+      "compared_rows": 1246,
+      "conflicts": []
+    },
+    {
+      "source": "papaya",
+      "compared_rows": 1246,
+      "conflicts": []
+    },
+    {
+      "source": "cashlogy",
+      "compared_rows": 1246,
+      "conflicts": []
+    }
+  ],
+  "sha256_official_raw": "b3498e1f98bab6d5392b11469cdb4e6ac1b29d520603bbd7bf169d3540826486",
+  "sha256_history": "d940ca0e883d288df297f096960018386218fb446231a8186e21cefca421d990",
+  "cors": {
+    "official_api": null,
+    "smok95": "*",
+    "papaya": "*"
+  }
+}

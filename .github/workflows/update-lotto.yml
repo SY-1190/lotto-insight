@@ -1,0 +1,78 @@
+name: Update Lotto and Deploy Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - scripts/update_lotto.py
+      - tests/test_update_lotto.py
+      - .github/workflows/update-lotto.yml
+  workflow_dispatch:
+  schedule:
+    # Saturday 21:15 / 22:15 and Sunday 09:15, Korea Standard Time (UTC+9).
+    - cron: '15 12,13 * * 6'
+    - cron: '15 0 * * 0'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lotto-pages
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: write
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Verify the updater
+        run: python -m unittest discover -s tests -v
+      - name: Download and validate the complete history
+        run: python scripts/update_lotto.py --file index.html
+      - name: Check the embedded dataset
+        run: python scripts/update_lotto.py --file index.html --check-only
+      - name: Commit verified data when changed
+        shell: bash
+        run: |
+          if ! git diff --quiet -- index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html
+            git commit -m "data: update verified Lotto 6/45 history"
+            git push origin HEAD:main
+          fi
+      - name: Package the standalone page
+        run: |
+          mkdir -p _site
+          cp index.html _site/index.html
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
